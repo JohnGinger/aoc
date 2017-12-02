@@ -34,11 +34,9 @@ fn main() {
             for check_index in (index + 1)..numbers.len() {
                 if *num % numbers[check_index] == 0 {
                     even_divide = *num / numbers[check_index];
-                    println!("Even divide {}", even_divide)
                 }
                 if numbers[check_index] % *num == 0 {
                     even_divide = numbers[check_index] / *num;
-                    println!("Even divide {}", even_divide)
                 }
             }
         }
