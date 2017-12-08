@@ -12,7 +12,7 @@ for (let line of lines) {
   if (!indexes[compareRegister]){
     indexes[compareRegister] = 0;
   }
-  if (eval(`${indexes[compareRegister]} ${compareType}  ${Number(compareAmount)}`)){
+  if (eval(`${indexes[compareRegister]} ${compareType} ${Number(compareAmount)}`)){
     if (instruction === "inc"){
       indexes[register] += Number(amount);
     } else if (instruction === "dec"){
