@@ -1,66 +1,51 @@
 const { readFileSync } = require("fs");
 const input = readFileSync("./input.txt", { encoding: "utf8" });
-let inputLengths = Array.from(input.split(","), Number);
 
-const hash = ({ inputLengths, position = 0, skip = 0 }) => {
-  let indexes = Array(256)
-    .fill(0)
-    .map((_, i) => i);
-  for (length of inputLengths) {
-    let arrayToReverse = indexes.slice(position, position + length);
-    let before = indexes.slice(0, position);
-
-    if (position + length > indexes.length) {
-      let overflow = (position + length) % indexes.length;
-      arrayToReverse = [...arrayToReverse, ...indexes.slice(0, overflow)];
-      arrayToReverse.reverse();
-      before = [
-        ...arrayToReverse.slice(length - overflow),
-        ...indexes.slice(overflow, position)
-      ];
-      arrayToReverse = arrayToReverse.slice(0, length - overflow);
-    } else {
-      arrayToReverse.reverse();
+const runInstructions = instructions => {
+  let x = 0;
+  let y = 0;
+  let maxDistance = 0;
+  let distance = 0;
+  for (instruction of instructions.split(",")) {
+    switch (instruction) {
+      case "n":
+        y += 1;
+        break;
+      case "ne":
+        y += 0.5;
+        x += 0.5;
+        break;
+      case "nw":
+        y += 0.5;
+        x -= 0.5;
+        break;
+      case "se":
+        y -= 0.5;
+        x += 0.5;
+        break;
+      case "sw":
+        y -= 0.5;
+        x -= 0.5;
+        break;
+      case "s":
+        y -= 1;
+        break;
     }
-
-    indexes = [
-      ...before,
-      ...arrayToReverse.slice(0, length),
-      ...indexes.slice(length + position)
-    ];
-    position = (position + length + skip) % indexes.length;
-    skip += 1;
+    distance = Math.abs(x) + Math.abs(y);
+    if (distance > maxDistance) {
+      maxDistance = distance;
+    }
   }
 
-  return { indexes, skip, position };
+  return {
+    shortest: distance,
+    maxDistance
+  };
 };
 
-let { indexes } = hash({ inputLengths });
-console.log("Part 1 is ", indexes[0] * indexes[1]);
-
-let inputChars = Array.from(input.split(""), v => v.charCodeAt(0));
-const suffix = [17, 31, 73, 47, 23];
-const lengths = [...suffix];
-
-let hashRounds = 63;
-let globalIndexes = [];
-let skip = 0;
-let position = 0;
-for (let i = 0; i < hashRounds; i++) {
-  let result = hash({
-    inputLengths: lengths,
-    skip,
-    position
-  });
-  skip = result.skip;
-  position = result.position;
-  globalIndexes = result.indexes;
-}
-
-const xor16 = input => input.slice(1).reduce((p, c) => p ^ c, input[0]);
-
-let result = [];
-for (let i = 0; i < 16; i++) {
-  result.push(xor16(globalIndexes.slice(i * 16, (i + 1) * 16)));
-}
-console.log(result.map(x => x.toString(16).padStart(2, "0")).join(""));
+console.log(runInstructions("ne,ne,ne"));
+console.log(runInstructions("ne,ne,sw,sw"));
+console.log(runInstructions("ne,ne,s,s"));
+console.log(runInstructions("se,sw,se,sw,sw"));
+console.log("Part 1 is ", runInstructions(input).shortest);
+console.log("Part 2 is ", runInstructions(input).maxDistance);
