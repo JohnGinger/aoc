@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::Read;
+use std::io::Read
 
 fn main() {
     let file_name = "../input.txt";
