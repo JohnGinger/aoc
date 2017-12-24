@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::Read;
-use std::f32;
+use std::collections::HashMap;
+use std::collections::HashSet;
 
 fn main() {
     let file_name = "../input.txt";
@@ -9,38 +10,52 @@ fn main() {
     file.read_to_string(&mut contents)
         .expect("Cannot convert file contents to string!");
 
-    let directions = contents.split(",");
-
-    let mut x: f32 = 0.0;
-    let mut y: f32 = 0.0;
-    let mut max_dist = 0.0;
-
-    for direction in directions {
-        match direction {
-            "ne" => {
-                x += 0.5;
-                y += 0.5
-            }
-            "n" => y += 1.0,
-            "nw" => {
-                x -= 0.5;
-                y += 0.5
-            }
-            "sw" => {
-                x -= 0.5;
-                y -= 0.5
-            }
-            "s" => y -= 1.0,
-            "se" => {
-                x += 0.5;
-                y -= 0.5
-            }
-            _ => panic!("That isn't a direction"),
-        }
-        if (x.abs() + y.abs()) > max_dist {
-            max_dist = x.abs() + y.abs();
-        }
+    let mut groups = HashMap::new();
+    let mut location_counter : usize =0;
+    for line in contents.lines() {
+        groups.insert(location_counter,get_connected(line));
+        location_counter +=1;
     }
-    println!("Part 1 is {}", x.abs() + y.abs());
-    println!("Part 2 is {}", max_dist);
+
+    let mut seen_so_far = HashSet::new();
+    get_children(0, &groups, &mut seen_so_far);
+    println!("Part 1 is {}", seen_so_far.len());
+
+
+    let mut total_seen: HashSet<usize> = HashSet::new();
+    let mut groups_count = 0;
+    let locations =(0..location_counter).collect::<Vec<_>>();
+    loop {
+        let group_start = locations.iter().find(|x| !total_seen.contains(x));
+        match group_start {
+            Some(&start) => get_children(start, &groups, &mut total_seen),
+            None => break
+        };
+        groups_count += 1;
+    }
+
+        println!("Part 2 is {}", groups_count);
+
+
+}
+
+fn get_children(address: usize,  groups: &HashMap<usize, Vec<usize>>, seen_so_far: &mut HashSet<usize>) -> Vec<usize>{
+    match groups.get(&address) {
+        Some(addresses) => {
+            seen_so_far.insert(address);
+            let seen_so_far_clone = seen_so_far.clone();
+            addresses.iter().filter(|x| !seen_so_far_clone.contains(x)).flat_map(|&child_address| get_children(child_address, groups, seen_so_far)).collect()
+        },
+        None => vec![]
+    }
+}
+
+
+fn get_connected(line: &str) -> Vec<usize> {
+    line.split(" <-> ")
+        .nth(1)
+        .unwrap()
+        .split(",")
+        .map(|x| x.trim().parse::<usize>().unwrap())
+        .collect()
 }
