@@ -20,7 +20,7 @@ fn main() {
         elements.push(i);
     }
     let hash_elements = hash_round(&input_lengths, 0, 0, elements).0;
-    println!("Part 1 is {:?}", hash_elements[0]*hash_elements[1]);
+    println!("Part 1 is {:?}", hash_elements[0] * hash_elements[1]);
     println!("Part 2 is {}", knot_hash(contents));
 }
 
@@ -33,7 +33,7 @@ fn knot_hash(input: String) -> String {
     let mut elements: Vec<usize> = (0..255).collect();
     elements.push(255);
     for _ in 0..64 {
-        let round_result =hash_round(&lengths, position, skip, elements);
+        let round_result = hash_round(&lengths, position, skip, elements);
         elements = round_result.0;
         position = round_result.1;
         skip = round_result.2;
@@ -98,8 +98,8 @@ mod test {
 
     #[test]
     fn test_hash() {
-        let elements = hash_round(&vec![3, 4, 1, 5], 0, 0, vec![0, 1, 2, 3,4]).0;
-        assert_eq!(elements[0]*elements[1], 12);
+        let elements = hash_round(&vec![3, 4, 1, 5], 0, 0, vec![0, 1, 2, 3, 4]).0;
+        assert_eq!(elements[0] * elements[1], 12);
     }
 
     #[test]
@@ -132,4 +132,3 @@ mod test {
         assert_eq!(res, String::from("63960835bcdc130f0b66d7ff4f6a5a8e"));
     }
 }
-

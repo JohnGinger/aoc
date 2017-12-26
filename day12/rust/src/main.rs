@@ -11,10 +11,10 @@ fn main() {
         .expect("Cannot convert file contents to string!");
 
     let mut groups = HashMap::new();
-    let mut location_counter : usize =0;
+    let mut location_counter: usize = 0;
     for line in contents.lines() {
-        groups.insert(location_counter,get_connected(line));
-        location_counter +=1;
+        groups.insert(location_counter, get_connected(line));
+        location_counter += 1;
     }
 
     let mut seen_so_far = HashSet::new();
@@ -24,29 +24,37 @@ fn main() {
 
     let mut total_seen: HashSet<usize> = HashSet::new();
     let mut groups_count = 0;
-    let locations =(0..location_counter).collect::<Vec<_>>();
+    let locations = (0..location_counter).collect::<Vec<_>>();
     loop {
         let group_start = locations.iter().find(|x| !total_seen.contains(x));
         match group_start {
             Some(&start) => get_children(start, &groups, &mut total_seen),
-            None => break
+            None => break,
         };
         groups_count += 1;
     }
 
-        println!("Part 2 is {}", groups_count);
-
-
+    println!("Part 2 is {}", groups_count);
 }
 
-fn get_children(address: usize,  groups: &HashMap<usize, Vec<usize>>, seen_so_far: &mut HashSet<usize>) -> Vec<usize>{
+fn get_children(
+    address: usize,
+    groups: &HashMap<usize, Vec<usize>>,
+    seen_so_far: &mut HashSet<usize>,
+) -> Vec<usize> {
     match groups.get(&address) {
         Some(addresses) => {
             seen_so_far.insert(address);
             let seen_so_far_clone = seen_so_far.clone();
-            addresses.iter().filter(|x| !seen_so_far_clone.contains(x)).flat_map(|&child_address| get_children(child_address, groups, seen_so_far)).collect()
-        },
-        None => vec![]
+            addresses
+                .iter()
+                .filter(|x| !seen_so_far_clone.contains(x))
+                .flat_map(|&child_address| {
+                    get_children(child_address, groups, seen_so_far)
+                })
+                .collect()
+        }
+        None => vec![],
     }
 }
 
