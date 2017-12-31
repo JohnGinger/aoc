@@ -1,7 +1,14 @@
 use std::fs::File;
 use std::io::Read;
+use std::collections::HashMap;
 
 mod knot_hash;
+
+#[derive(Debug, PartialEq, Eq, Hash)]
+struct Point {
+    x: isize,
+    y: isize,
+}
 
 fn main() {
     let file_name = "../input.txt";
@@ -11,8 +18,11 @@ fn main() {
         .expect("Cannot convert file contents to string!");
 
     let mut found = 0;
-    for row in 0..128 {
-        let row = knot_hash::get(format!("{}-{}", contents, row));
+    let mut points = HashMap::new();
+    let mut region_id = 0;
+    let mut joined = 0;
+    for y in 0..128 {
+        let row = knot_hash::get(format!("{}-{}", contents, y));
 
         let line_binary = format!(
             "{:?}",
@@ -31,13 +41,48 @@ fn main() {
                 .collect::<String>()
         );
 
+        let mut x = 0;
+        for point in line_binary.split("").filter(|s| !s.is_empty()) {
+            x += 1;
+            if point == "1" {
+                found += 1;
+
+                let point = Point { x, y };
+
+                let point_left = ref_to_value(points.get(&Point { x: x - 1, y }));
+                let point_above = ref_to_value(points.get(&Point { x: x, y: y - 1 }));
 
 
-        found += line_binary
-            .split("")
-            .filter(|s| !s.is_empty())
-            .filter(|&x| x == "1")
-            .fold(0, |acc, _c| acc + 1);
+                match (point_left, point_above) {
+                    (Some(left), None) => points.insert(point, left),
+                    (None, Some(above)) => points.insert(point, above),
+                    (Some(left), Some(above)) => {
+                        if left != above {
+                            for val in points.values_mut() {
+                                if *val == above {
+                                    *val = left;
+                                }
+                            }
+                            joined += 1;
+                        }
+                        points.insert(point, left)
+                    }
+                    (None, None) => {
+                        region_id += 1;
+                        points.insert(point, region_id)
+                    }
+                };
+            }
+        }
     }
     println!("Part 1 is {}", found);
+    println!("Part 2 is {}", region_id - joined);
+}
+
+
+fn ref_to_value(option: Option<&usize>) -> Option<usize> {
+    match option {
+        Some(value) => Some(*value),
+        None => None,
+    }
 }
