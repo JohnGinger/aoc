@@ -1,0 +1,47 @@
+1 is {"f": 0, "b": 3188, "p": 976973188, "i": 126, "a": 2147483647}
+Part 1 is 3188
+Instruction { id: 1, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(31)) }
+Instruction { id: 1, register: Some('a'), arg1: (Some('a'), None), arg2: (None, Some(1)) }
+Instruction { id: 3, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(17)) }
+Instruction { id: 6, register: Some('p'), arg1: (Some('p'), None), arg2: (Some('p'), None) }
+Instruction { id: 3, register: Some('a'), arg1: (Some('a'), None), arg2: (None, Some(2)) }
+Instruction { id: 2, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(-1)) }
+Instruction { id: 6, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(-2)) }
+Instruction { id: 2, register: Some('a'), arg1: (Some('a'), None), arg2: (None, Some(-1)) }
+Instruction { id: 1, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(127)) }
+Instruction { id: 1, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(680)) }
+Instruction { id: 3, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(8505)) }
+Instruction { id: 4, register: Some('p'), arg1: (Some('p'), None), arg2: (Some('a'), None) }
+Instruction { id: 3, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(129749)) }
+Instruction { id: 2, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(12345)) }
+Instruction { id: 4, register: Some('p'), arg1: (Some('p'), None), arg2: (Some('a'), None) }
+Instruction { id: 1, register: Some('b'), arg1: (Some('b'), None), arg2: (Some('p'), None) }
+Instruction { id: 4, register: Some('b'), arg1: (Some('b'), None), arg2: (None, Some(10000)) }
+Instruction { id: 0, register: Some('b'), arg1: (Some('b'), None), arg2: (None, None) }
+Instruction { id: 2, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(-1)) }
+Instruction { id: 6, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(-9)) }
+Instruction { id: 6, register: Some('a'), arg1: (Some('a'), None), arg2: (None, Some(3)) }
+Instruction { id: 5, register: Some('b'), arg1: (Some('b'), None), arg2: (None, None) }
+Instruction { id: 6, register: Some('b'), arg1: (Some('b'), None), arg2: (None, Some(-1)) }
+Instruction { id: 1, register: Some('f'), arg1: (Some('f'), None), arg2: (None, Some(0)) }
+Instruction { id: 1, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(126)) }
+Instruction { id: 5, register: Some('a'), arg1: (Some('a'), None), arg2: (None, None) }
+Instruction { id: 5, register: Some('b'), arg1: (Some('b'), None), arg2: (None, None) }
+Instruction { id: 1, register: Some('p'), arg1: (Some('p'), None), arg2: (Some('a'), None) }
+Instruction { id: 3, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(-1)) }
+Instruction { id: 2, register: Some('p'), arg1: (Some('p'), None), arg2: (Some('b'), None) }
+Instruction { id: 6, register: Some('p'), arg1: (Some('p'), None), arg2: (None, Some(4)) }
+Instruction { id: 0, register: Some('a'), arg1: (Some('a'), None), arg2: (None, None) }
+Instruction { id: 1, register: Some('a'), arg1: (Some('a'), None), arg2: (Some('b'), None) }
+Instruction { id: 6, register: None, arg1: (None, Some(1)), arg2: (None, Some(3)) }
+Instruction { id: 0, register: Some('b'), arg1: (Some('b'), None), arg2: (None, None) }
+Instruction { id: 1, register: Some('f'), arg1: (Some('f'), None), arg2: (None, Some(1)) }
+Instruction { id: 2, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(-1)) }
+Instruction { id: 6, register: Some('i'), arg1: (Some('i'), None), arg2: (None, Some(-11)) }
+Instruction { id: 0, register: Some('a'), arg1: (Some('a'), None), arg2: (None, None) }
+Instruction { id: 6, register: Some('f'), arg1: (Some('f'), None), arg2: (None, Some(-16)) }
+Instruction { id: 6, register: Some('a'), arg1: (Some('a'), None), arg2: (None, Some(-19)) }
+hit 5
+1 is {'f': 0, 'p': 17, 'i': 126, 'a': 1}
+hit 5
+0 is {'b': 3188, 'i': 126, 'p': 976973188, 'a': 2147483647, 'f': 0}
