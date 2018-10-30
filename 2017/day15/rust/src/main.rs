@@ -12,22 +12,21 @@ fn main() {
     let mut a_multipe4 = Vec::new();
     let mut b_multiple8 = Vec::new();
     let mut i = 0;
+
+    let mask = 65535;
     while a_multipe4.len() <= 5000000 || b_multiple8.len() <= 5000000 {
         a = (a * a_factor) % remainder;
         b = (b * b_factor) % remainder;
-        let mut a_str = format!("{:032b}", a);
-        let mut b_str = format!("{:032b}", b);
-
         if (a % 4) == 0 {
-            a_multipe4.push(a_str.clone().split_off(16))
+            a_multipe4.push(a & mask)
         }
 
         if (b % 8) == 0 {
-            b_multiple8.push(b_str.clone().split_off(16))
+            b_multiple8.push(b & mask)
         }
 
         if i <= 400000000 {
-            if a_str.split_off(16) == b_str.split_off(16) {
+            if a & mask == b & mask {
                 matches += 1;
             }
         }

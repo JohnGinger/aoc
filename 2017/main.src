@@ -1,0 +1,19 @@
+get_all_valid_bridges_tree
+
+find_largest_sum
+
+struct Part {
+    x: usize,
+    y: usize
+}
+
+
+fn get_value(part: part, parts: Vec<Part>) -> usize {
+    let get_connectable = parts.filter(|to_connect| to_connect.x == part.x || to_connect.y == part.y || to_connect.x == part.y || to_connect.y == part.x).collect();
+    if get_connectable.len() == 0 {
+        part.x + part.y
+    } else {
+        part.x + part.y + get_connectable.map(|part| get_value(part, parts)).max().expect("Ww have already checked the length");
+    }
+}
+
