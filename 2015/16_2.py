@@ -11,7 +11,7 @@ signature = {
 
 def parse_line(line):
     regex = re.compile(
-        r'^Sue ([0-9]+): ([A-Za-z]+): ([0-9]+), ([A-Za-z]+): ([0-9]+), ([A-Za-z]+): ([0-9]+)$')
+        r'Sue ([0-9]+): ([A-Za-z]+): ([0-9]+), ([A-Za-z]+): ([0-9]+), ([A-Za-z]+): ([0-9]+)')
     matches = re.match(regex, line).groups()
     for match in list(zip(matches[1::2], matches[2::2])):
         if match[0] == "cats" or match[0] == "trees":
