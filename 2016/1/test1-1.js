@@ -1,1 +1,0 @@
-module.exports = "R2, L3";

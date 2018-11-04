@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "canvas": "^2.0.1",
+    "gifencoder": "^1.1.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {},

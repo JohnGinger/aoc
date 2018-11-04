@@ -1,1 +1,0 @@
-module.exports = `qzmt-zixmtkozy-ivhz-343[abcde]`
