@@ -2,9 +2,9 @@ from itertools import permutations, combinations_with_replacement
 from aoc_util import next_permutation
 import sys
 
-your_hit_points = 50
+your_hit_points = 30
 your_mana = 500
-boss_hit_points = 55
+boss_hit_points = 35
 boss_damage = 8
 
 # [name,cost,damage,healing,armour,mana,effect_length]
@@ -151,7 +151,7 @@ def valid_combination(combination):
 
 
 min_cost = 10000000
-for number_of_rounds in range(9, 10):
+for number_of_rounds in range(8):
     combinations = combinations_with_replacement(
         attacks, number_of_rounds)
     for combination in combinations:

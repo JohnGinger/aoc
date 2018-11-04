@@ -36,3 +36,21 @@ def next_permutation(l):
     yield l
     while next_permutation_in_place(l):
         yield l
+
+
+def split_chunks(l, n):
+    """ 
+       Splits list l into n chunks with approximately equals sum of values
+       see  http://stackoverflow.com/questions/6855394/splitting-list-in-chunks-of-balanced-weight
+    """
+    result = [[] for i in range(n)]
+    sums = {i: 0 for i in range(n)}
+    c = 0
+    for e in l:
+        for i in sums:
+            if c == sums[i]:
+                result[i].append(e)
+                break
+        sums[i] += e
+        c = min(sums.values())
+    return result
