@@ -32,15 +32,12 @@ function getMoves(instructions) {
 
 function process(instructions) {
   let bots = getBots(instructions.split("\n").filter(x => x[0] === "v"));
-  //console.log(bots)
 
   let moves = getMoves(instructions.split("\n").filter(x => x[0] !== "v"));
-  // console.log(moves)
 
   let currentBots = bots.filter(x => x.boxes.length === 2);
 
   let i = 0;
-  console.log(i, currentBots);
 
   let outputs = [];
   while (!weHaveTheOnesWeWant(currentBots)) {
@@ -72,21 +69,24 @@ function process(instructions) {
       x.boxes = [];
     });
     currentBots = bots.filter(x => x.boxes.length === 2);
-    i++; //console.log(currentBots)
+    i++;
 
-    /* if (currentBots.some(x => {
-                let pair = x.boxes
-                return (
-                    pair[0] == '61' ||
-                    pair[1] == '61')
-            })) { */
-    console.log(i, currentBots);
+    let correctBot = currentBots.findIndex(x => {
+      let pair = x.boxes;
+      return (
+        (pair[0] === "61" && pair[1] === "17") ||
+        (pair[0] === "17" && pair[1] === "61")
+      );
+    });
 
-    //}
+    if (correctBot !== -1) {
+      console.log("Part 1 is", currentBots[correctBot].bot);
+    }
   }
-
-  console.log(i, currentBots);
-  console.log(outputs);
+  console.log(
+    "Part 2 is",
+    Number(outputs[0][0]) * Number(outputs[1][0]) * Number(outputs[2][0])
+  );
 }
 
 function getBot(bots, id) {
@@ -106,12 +106,6 @@ function getBot(bots, id) {
 }
 
 function weHaveTheOnesWeWant(bots) {
-  /*bots.map(x => x.boxes)
-        .some(pair => {
-            return (pair[0] == '17' ||
-                pair[1] == '17') && (pair[0] == '61' ||
-                pair[1] == '61')
-        }) */
   return bots.length == 0;
 }
 
