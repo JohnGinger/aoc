@@ -5,7 +5,7 @@ function simulate(inputRegisters, instructions) {
 
   let i = 0;
   let wg = 0;
-  while (i >= 0 && i < instructions.length && wg < 1000000000) {
+  while (i >= 0 && i < instructions.length && wg < 100000000000000000) {
     let command = instructions[i][0];
     let amount = instructions[i][1];
     let register = instructions[i][2];
@@ -54,6 +54,7 @@ function simulate(inputRegisters, instructions) {
       }
     } else if (command === instructs.tgl) {
       let address = registers[register] + i;
+      console.log(address, registers);
       if (address < instructions.length) {
         let command = instructions[address][0];
         if (command === instructs.inc) {
@@ -179,7 +180,7 @@ let instructions = getInstructionsFromInput(util.inputLinesArray("23"));
 console.log("Part 1", simulate([7, 0, 0, 0], instructions));
 
 instructions = getInstructionsFromInput(util.inputLinesArray("23"));
-console.log("Part 2", simulate([12, 0, 0, 0], instructions)); //too many instructions
+console.log("Part 2", simulate([12, 0, 0, 0], instructions));
 
 // Translate code
 /*
