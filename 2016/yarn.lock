@@ -168,6 +168,10 @@ isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
 
+js-heap@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/js-heap/-/js-heap-0.3.1.tgz#5b48965edb23bf6497f55e4982b5699ae9e02f4c"
+
 minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
