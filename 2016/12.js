@@ -4,7 +4,8 @@ function simulate(inputRegisters, instructions) {
   let registers = inputRegisters;
 
   let i = 0;
-  while (i >= 0 && i < instructions.length) {
+  let wg = 0;
+  while (i >= 0 && i < instructions.length && wg < 20) {
     let command = instructions[i][0];
     let amount = instructions[i][1];
     let register = instructions[i][2];
@@ -23,6 +24,8 @@ function simulate(inputRegisters, instructions) {
     } else if (command === 5) {
       i += amount - 1;
     }
+    console.log(i, instructionTypes[command], registers);
+    wg += 1;
     i += 1;
   }
   return registers;
@@ -71,7 +74,7 @@ function processInput(lines) {
   }
 
   console.log("Part 1", simulate([0, 0, 0, 0], instructions));
-  console.log("Part 2", simulate([0, 0, 1, 0], instructions));
+  //console.log("Part 2", simulate([0, 0, 1, 0], instructions));
 }
 
 processInput(util.inputLinesArray("12"));
