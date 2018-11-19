@@ -1,6 +1,6 @@
-const { readFileSync } = require("fs");
-const input = readFileSync("./input.txt", { encoding: "utf8" });
-const numberToFind = Number(input);
+const { input } = require("./aoc_util");
+
+const numberToFind = Number(input(3));
 
 function getLevel(target) {
   let count = 1;
@@ -12,7 +12,7 @@ function getLevel(target) {
     count += 4 * lengthOfSide + 4;
     if (target < count) {
       const distFromCorner = count - target;
-      const sideDist = distFromCorner % (lengthOfSide + 1) - level;
+      const sideDist = (distFromCorner % (lengthOfSide + 1)) - level;
       return level + Math.abs(sideDist);
     }
   }
