@@ -1,21 +1,12 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
+use aoc_util::get_input;
 
 fn main() {
-    let file_name = "input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).expect(
-        "Cannot convert file contents to string!",
-    );
-
-    let numbers: Vec<i32> = contents
-        .trim()
+    let numbers: Vec<i32> = get_input(1)
         .split("")
         .filter(|s| !s.is_empty())
         .map(|s| s.parse().unwrap())
         .collect();
-
     let mut total1 = 0;
     let mut total2 = 0;
     for i in 1..numbers.len() {
@@ -32,6 +23,5 @@ fn main() {
     }
 
     println!("Part 1 solution: {}", total1);
-
     println!("Part 2 solution: {}", total2);
 }

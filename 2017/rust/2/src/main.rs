@@ -1,23 +1,9 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).expect(
-        "Cannot convert file contents to string!",
-    );
-
-    let lines: Vec<&str> = contents
-        .trim()
-        .split("\n")
-        .filter(|s| !s.is_empty())
-        .collect();
-
     let mut part1 = 0;
     let mut part2 = 0;
-    for line in lines {
+    for line in aoc_util::iterate_input_lines(2) {
         let numbers: Vec<i32> = line.split_whitespace()
             .map(|s| s.parse().unwrap())
             .collect();
