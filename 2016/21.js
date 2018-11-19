@@ -92,13 +92,3 @@ for (permutation of getAllPermutations("abcdefgh")) {
     break;
   }
 }
-
-/*
-let input = "abcdefgh";
-for (instruction of instructions) {
-  console.log(input);
-  console.log(instruction.toString());
-  input = instruction(input);
-}
-console.log(input);
-*/

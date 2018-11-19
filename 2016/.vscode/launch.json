@@ -22,7 +22,7 @@
       "type": "node",
       "request": "launch",
       "name": "JS",
-      "program": "${workspaceRoot}/21.js",
+      "program": "${workspaceRoot}/22.js",
       "cwd": "${workspaceRoot}"
     },
     {
