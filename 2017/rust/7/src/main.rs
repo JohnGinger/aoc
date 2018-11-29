@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashSet;
 
 #[macro_use]
@@ -16,15 +15,9 @@ struct Disc {
 }
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).expect(
-        "Cannot convert file contents to string!",
-    );
-
-    let lines = contents.lines();
-    let disks = lines.map(|x| get_disk_from_line(x)).collect::<Vec<Disc>>();
+    let disks = aoc_util::iterate_input_lines(7)
+        .map(|x| get_disk_from_line(&x))
+        .collect::<Vec<Disc>>();
     let disks_to_remove: HashSet<String> = HashSet::from_iter(
         disks
             .iter()
@@ -46,7 +39,9 @@ fn main() {
 
 fn get_disk_from_line(line: &str) -> Disc {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"(?P<id>[a-z]+) \((?P<weight>[0-9]+)\)( -> (?P<holding>[a-z, ]+))?").unwrap();
+        static ref RE: Regex =
+            Regex::new(r"(?P<id>[a-z]+) \((?P<weight>[0-9]+)\)( -> (?P<holding>[a-z, ]+))?")
+                .unwrap();
     }
 
     match RE.captures(line) {
@@ -76,7 +71,6 @@ fn get_disk_from_line(line: &str) -> Disc {
             weight: 0,
             holding: vec![],
         },
-
     }
 }
 
@@ -87,7 +81,8 @@ fn get_disk(id: String, disks: &Vec<Disc>) -> Option<&Disc> {
 fn get_weight(id: String, disks: &Vec<Disc>) -> i32 {
     let disk = get_disk(id.clone(), disks).unwrap();
     if disk.holding.len() > 0 {
-        let weights = disk.holding
+        let weights = disk
+            .holding
             .iter()
             .map(|x| get_weight(String::from(x.clone()), disks))
             .collect::<Vec<i32>>();

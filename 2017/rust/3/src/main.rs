@@ -46,7 +46,6 @@ fn main() {
             grid.insert(Coord(x, y), new_value);
         }
 
-
         if index == target_number {
             println!("Part 1 solution is {}", i32::abs(x) + i32::abs(y));
         }

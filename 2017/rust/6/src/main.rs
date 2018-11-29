@@ -1,16 +1,8 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashSet;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).expect(
-        "Cannot convert file contents to string!",
-    );
-
-    let numbers = contents
+    let numbers = aoc_util::get_input(6)
         .split_whitespace()
         .map(|x| x.parse().unwrap())
         .collect::<Vec<usize>>();

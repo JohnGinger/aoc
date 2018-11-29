@@ -1,7 +1,5 @@
-use std::fs::File;
-use std::io::Read;
-use std::collections::HashSet;
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 #[macro_use]
 extern crate lazy_static;
@@ -22,12 +20,13 @@ impl ThreeD {
     }
 }
 
-
 fn build_three_d(input: &str) -> ThreeD {
     let numbers = input
         .split(",")
         .map(|x| {
-            x.trim().parse().expect(&format!("The regex went wrong {}", input))
+            x.trim()
+                .parse()
+                .expect(&format!("The regex went wrong {}", input))
         })
         .collect::<Vec<isize>>();
     ThreeD {
@@ -44,7 +43,7 @@ struct Instruction {
     acceleration: ThreeD,
 }
 
-impl Instruction{
+impl Instruction {
     fn simulate(&mut self) {
         self.velocity.x += self.acceleration.x;
         self.velocity.y += self.acceleration.y;
@@ -57,25 +56,23 @@ impl Instruction{
 }
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
+    let contents = aoc_util::get_input(20);
 
     let instructions = parse_instructions(contents);
     let num_instructions = instructions.len();
-    //println!("{:?}", instructions.iter().map(|instruction| instruction.acceleration.len()).collect::<Vec<f32>>());
 
-    println!("Part 1 is {:?}", instructions
-    .iter()
-    .map(|instruction| instruction.acceleration.len())
-    .enumerate()
-    .fold((0, f32::MAX), |min, (i, current)| if current < min.1 {
-        (i, current)
-    } else {
-        min
-    }));
+    println!(
+        "Part 1 is {:?}",
+        instructions
+            .iter()
+            .map(|instruction| instruction.acceleration.len())
+            .enumerate()
+            .fold((0, f32::MAX), |min, (i, current)| if current < min.1 {
+                (i, current)
+            } else {
+                min
+            })
+    );
 
     let mut removed = HashSet::new();
     let mut simulated_instructions = instructions;
@@ -83,7 +80,7 @@ fn main() {
         let mut visited = HashMap::new();
         for i in 0..simulated_instructions.len() {
             let instruction = &mut simulated_instructions[i];
-            if removed.contains(&i){
+            if removed.contains(&i) {
                 continue;
             }
             match visited.insert(instruction.position, i) {
@@ -91,8 +88,8 @@ fn main() {
                     removed.insert(i);
                     removed.insert(x);
                     ()
-                },
-                None => ()
+                }
+                None => (),
             }
             instruction.simulate();
         }
@@ -100,20 +97,18 @@ fn main() {
     println!("Part 2 is {:?}", num_instructions - removed.len())
 }
 
-
 fn parse_instructions(input: String) -> Vec<Instruction> {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"<(?P<p>[ 0-9,-]+)>.+<(?P<v>[ 0-9,-]+)>.+<(?P<a>[ 0-9,-]+)>").unwrap();
+        static ref RE: Regex =
+            Regex::new(r"<(?P<p>[ 0-9,-]+)>.+<(?P<v>[ 0-9,-]+)>.+<(?P<a>[ 0-9,-]+)>").unwrap();
     }
     input
         .lines()
         .map(|line| RE.captures(line).expect("Line was badly formatted"))
-        .map(|cap| {
-            Instruction {
-                position: build_three_d(&cap["p"]),
-                velocity: build_three_d(&cap["v"]),
-                acceleration: build_three_d(&cap["a"]),
-            }
+        .map(|cap| Instruction {
+            position: build_three_d(&cap["p"]),
+            velocity: build_three_d(&cap["v"]),
+            acceleration: build_three_d(&cap["a"]),
         })
         .collect()
 }

@@ -30,5 +30,5 @@ fn main() {
         part2 += even_divide
     }
     println!("Part 1 is {}", part1);
-    println!("Part 1 is {}", part2);
+    println!("Part 2 is {}", part2);
 }

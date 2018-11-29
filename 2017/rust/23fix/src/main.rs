@@ -1,21 +1,14 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashMap;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
-
     let mut registers: HashMap<&str, isize> = HashMap::new();
-    let lines = contents.lines().collect::<Vec<&str>>();
+    let lines = aoc_util::get_input_lines(23);
     let mut position = 0;
     let mut mul_used = 0;
     loop {
-        let parts = lines[position]
+        let l = lines.clone();
+        let parts = l[position]
             .split(" ")
             .filter(|x| !x.is_empty())
             .collect::<Vec<&str>>();
@@ -45,7 +38,7 @@ fn main() {
             }
             _ => panic!("I don't understand {}", parts[0]),
         };
-        position += 1;        
+        position += 1;
         if position >= lines.len() {
             break;
         }

@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::Read;
 
 fn main() {
-    let file_name = "../input.txt";
+    let file_name = "../data/24.txt";
     let mut file = File::open(file_name).expect("Unable to open input file!");
     let mut contents = String::new();
     file.read_to_string(&mut contents)

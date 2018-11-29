@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashMap;
 
 #[derive(PartialEq)]
@@ -29,11 +28,7 @@ struct Point {
 }
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
+    let contents = aoc_util::get_input(19);
 
     let points = parse_input(contents);
     let mut position = Position { x: 0, y: 0 };
@@ -83,50 +78,58 @@ fn main() {
         };
 
         match going {
-            Going::Up => if points.contains_key(&up) {
-                position = up
-            } else if points.contains_key(&left) {
-                going = Going::Left;
-                position = left
-            } else if points.contains_key(&right) {
-                going = Going::Right;
-                position = right
-            } else {
-                break;
-            },
-            Going::Down => if points.contains_key(&down) {
-                position = down
-            } else if points.contains_key(&left) {
-                going = Going::Left;
-                position = left
-            } else if points.contains_key(&right) {
-                going = Going::Right;
-                position = right
-            } else {
-                break;
-            },
-            Going::Left => if points.contains_key(&left) {
-                position = left
-            } else if points.contains_key(&up) {
-                going = Going::Up;
-                position = up
-            } else if points.contains_key(&down) {
-                going = Going::Down;
-                position = down
-            } else {
-                break;
-            },
-            Going::Right => if points.contains_key(&right) {
-                position = right
-            } else if points.contains_key(&up) {
-                going = Going::Up;
-                position = up
-            } else if points.contains_key(&down) {
-                going = Going::Down;
-                position = down
-            } else {
-                break;
-            },
+            Going::Up => {
+                if points.contains_key(&up) {
+                    position = up
+                } else if points.contains_key(&left) {
+                    going = Going::Left;
+                    position = left
+                } else if points.contains_key(&right) {
+                    going = Going::Right;
+                    position = right
+                } else {
+                    break;
+                }
+            }
+            Going::Down => {
+                if points.contains_key(&down) {
+                    position = down
+                } else if points.contains_key(&left) {
+                    going = Going::Left;
+                    position = left
+                } else if points.contains_key(&right) {
+                    going = Going::Right;
+                    position = right
+                } else {
+                    break;
+                }
+            }
+            Going::Left => {
+                if points.contains_key(&left) {
+                    position = left
+                } else if points.contains_key(&up) {
+                    going = Going::Up;
+                    position = up
+                } else if points.contains_key(&down) {
+                    going = Going::Down;
+                    position = down
+                } else {
+                    break;
+                }
+            }
+            Going::Right => {
+                if points.contains_key(&right) {
+                    position = right
+                } else if points.contains_key(&up) {
+                    going = Going::Up;
+                    position = up
+                } else if points.contains_key(&down) {
+                    going = Going::Down;
+                    position = down
+                } else {
+                    break;
+                }
+            }
         }
     }
     println!("Part 1 is {}", visited.into_iter().collect::<String>());

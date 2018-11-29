@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashMap;
 
 #[derive(PartialEq)]
@@ -10,11 +9,11 @@ enum Going {
     Right,
 }
 #[derive(Debug, Eq, PartialEq, Hash)]
-enum VirusState{
-    Clean, 
+enum VirusState {
+    Clean,
     Weakened,
     Infected,
-    Flagged
+    Flagged,
 }
 
 #[derive(Debug, Eq, PartialEq, Hash)]
@@ -23,47 +22,36 @@ struct Position {
     y: isize,
 }
 
-
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
     let mut going = Going::Up;
-    let mut position = Position {
-        x: 12,
-        y: 12
-    };
+    let mut position = Position { x: 12, y: 12 };
 
-    let mut y =0;
+    let mut y = 0;
     let mut map = HashMap::new();
     let mut map2 = HashMap::new();
 
-    for line in contents.lines() {
+    for line in aoc_util::iterate_input_lines(22) {
         let mut x = 0;
-        for letter in line.chars(){
+        for letter in line.chars() {
             match letter {
                 '#' => {
-                    map.insert(Position {x, y}, true); 
-                    map2.insert(Position {x, y}, VirusState::Infected); 
+                    map.insert(Position { x, y }, true);
+                    map2.insert(Position { x, y }, VirusState::Infected);
                     ()
-                    },
+                }
                 '.' => {
-                    map.insert(Position {x, y}, false);
-                    map2.insert(Position {x, y}, VirusState::Clean); 
+                    map.insert(Position { x, y }, false);
+                    map2.insert(Position { x, y }, VirusState::Clean);
                     ()
-                    },
-                _ => panic!("The map isn't valid")
+                }
+                _ => panic!("The map isn't valid"),
             }
             x += 1;
         }
-        y +=1;
+        y += 1;
     }
     let mut infected_count_one = 0;
     for _ in 0..10000 {
-
         let left = Position {
             x: position.x - 1,
             y: position.y,
@@ -92,36 +80,36 @@ fn main() {
                     Going::Up => {
                         going = Going::Left;
                         position = left
-                    },
+                    }
                     Going::Down => {
                         going = Going::Right;
                         position = right
-                    },
+                    }
                     Going::Left => {
                         going = Going::Down;
                         position = down
-                    },
+                    }
                     Going::Right => {
                         going = Going::Up;
                         position = up
                     }
                 }
-            },
+            }
             true => {
                 map.insert(position, false);
                 match going {
                     Going::Up => {
                         going = Going::Right;
                         position = right
-                    },
+                    }
                     Going::Down => {
                         going = Going::Left;
                         position = left
-                    },
+                    }
                     Going::Left => {
                         going = Going::Up;
                         position = up
-                    },
+                    }
                     Going::Right => {
                         going = Going::Down;
                         position = down
@@ -133,13 +121,9 @@ fn main() {
     println!("Part 1 is {}", infected_count_one);
 
     let mut infected_count_two = 0;
-    position = Position {
-        x: 12,
-        y: 12
-    };
+    position = Position { x: 12, y: 12 };
     going = Going::Up;
     for _ in 0..10000000 {
-
         /*
         Debug
         for j in -3..6 {
@@ -162,9 +146,8 @@ fn main() {
             println!("");
             println!("");
             println!("");
-
+        
             */
-
 
         let left = Position {
             x: position.x - 1,
@@ -193,75 +176,67 @@ fn main() {
                     Going::Up => {
                         going = Going::Left;
                         position = left
-                    },
+                    }
                     Going::Down => {
                         going = Going::Right;
                         position = right
-                    },
+                    }
                     Going::Left => {
                         going = Going::Down;
                         position = down
-                    },
+                    }
                     Going::Right => {
                         going = Going::Up;
                         position = up
                     }
                 }
-            },
+            }
             VirusState::Weakened => {
                 map2.insert(position, VirusState::Infected);
                 infected_count_two += 1;
                 match going {
-                    Going::Up => {
-                        position = up
-                    },
-                    Going::Down => {
-                        position = down
-                    },
-                    Going::Left => {
-                        position = left
-                    },
-                    Going::Right => {
-                        position = right
-                    }
+                    Going::Up => position = up,
+                    Going::Down => position = down,
+                    Going::Left => position = left,
+                    Going::Right => position = right,
                 }
-            },
+            }
             VirusState::Infected => {
                 map2.insert(position, VirusState::Flagged);
                 match going {
                     Going::Up => {
                         going = Going::Right;
                         position = right
-                    },
+                    }
                     Going::Down => {
                         going = Going::Left;
                         position = left
-                    },
+                    }
                     Going::Left => {
                         going = Going::Up;
                         position = up
-                    },
+                    }
                     Going::Right => {
                         going = Going::Down;
                         position = down
                     }
                 }
-            },
+            }
             VirusState::Flagged => {
                 map2.insert(position, VirusState::Clean);
                 match going {
                     Going::Up => {
                         going = Going::Down;
                         position = down
-                    },
+                    }
                     Going::Down => {
                         going = Going::Up;
                         position = up
-                    },
+                    }
                     Going::Left => {
                         going = Going::Right;
                         position = right
-                    },
+                    }
                     Going::Right => {
                         going = Going::Left;
                         position = left

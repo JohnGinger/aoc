@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 
 #[derive(Debug, Clone)]
 struct FirewallLevel {
@@ -8,16 +7,10 @@ struct FirewallLevel {
 }
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
-
     let mut levels = Vec::new();
-    for line in contents.lines() {
-        let values = line.split(":")
+    for line in aoc_util::iterate_input_lines(13) {
+        let values = line
+            .split(":")
             .map(|x| x.trim().parse().unwrap())
             .collect::<Vec<usize>>();
         levels.push(FirewallLevel {

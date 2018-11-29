@@ -6,3 +6,6 @@ authors = ["John ginger"]
 [dependencies]
 regex = "0.2"
 lazy_static = "1.0.0"
+
+[dependencies.aoc_util]
+path = "../aoc_util"

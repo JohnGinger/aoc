@@ -1,19 +1,11 @@
-use std::fs::File;
-use std::io::Read;
-use std::iter::FromIterator;
+extern crate aoc_util;
 use std::collections::HashSet;
+use std::iter::FromIterator;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).expect(
-        "Cannot convert file contents to string!",
-    );
-
     let mut part1 = 0;
     let mut part2 = 0;
-    for line in contents.lines() {
+    for line in aoc_util::iterate_input_lines(4) {
         let mut words_set = HashSet::new();
         let mut sorted_words_set = HashSet::new();
         let mut valid_part1 = true;
@@ -33,8 +25,6 @@ fn main() {
         if valid_part2 {
             part2 += 1;
         }
-
-
     }
     println!("Part 1 {} Part 2 {}", part1, part2);
 }

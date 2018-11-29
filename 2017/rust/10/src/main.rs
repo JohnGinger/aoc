@@ -1,15 +1,9 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 extern crate ascii;
 use ascii::AsciiChar;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
+    let contents = aoc_util::get_input(10);
     let input_lengths = contents
         .split(",")
         .map(|x| x.parse().unwrap())
@@ -81,14 +75,12 @@ fn rotate(vec: Vec<usize>, mid: usize) -> Vec<usize> {
     return rotated;
 }
 
-
-
 #[cfg(test)]
 mod test {
-    use super::hash_round;
-    use super::rotate;
     use super::get_ascii_string;
+    use super::hash_round;
     use super::knot_hash;
+    use super::rotate;
 
     #[test]
     fn test_rotate() {

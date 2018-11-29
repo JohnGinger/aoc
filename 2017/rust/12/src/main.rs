@@ -1,26 +1,18 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashMap;
 use std::collections::HashSet;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
     let mut groups = HashMap::new();
     let mut location_counter: usize = 0;
-    for line in contents.lines() {
-        groups.insert(location_counter, get_connected(line));
+    for line in aoc_util::iterate_input_lines(12) {
+        groups.insert(location_counter, get_connected(&line));
         location_counter += 1;
     }
 
     let mut seen_so_far = HashSet::new();
     get_children(0, &groups, &mut seen_so_far);
     println!("Part 1 is {}", seen_so_far.len());
-
 
     let mut total_seen: HashSet<usize> = HashSet::new();
     let mut groups_count = 0;
@@ -49,15 +41,12 @@ fn get_children(
             addresses
                 .iter()
                 .filter(|x| !seen_so_far_clone.contains(x))
-                .flat_map(|&child_address| {
-                    get_children(child_address, groups, seen_so_far)
-                })
+                .flat_map(|&child_address| get_children(child_address, groups, seen_so_far))
                 .collect()
         }
         None => vec![],
     }
 }
-
 
 fn get_connected(line: &str) -> Vec<usize> {
     line.split(" <-> ")

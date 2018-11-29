@@ -1,19 +1,11 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashMap;
 
 mod part2;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
-
     let mut registers: HashMap<&str, i64> = HashMap::new();
-    let lines = contents.lines().collect::<Vec<&str>>();
+    let lines = aoc_util::iterate_input_lines(18).collect::<Vec<&str>>();
     let mut position = 0;
     let mut played = 0;
     loop {
@@ -70,7 +62,7 @@ fn main() {
     }
     println!(
         "Part 2 is {}",
-        part2::run(contents.lines().collect::<Vec<&str>>())
+        part2::run(aoc_util::iterate_input_lines(18).collect::<Vec<&str>>())
     );
 }
 

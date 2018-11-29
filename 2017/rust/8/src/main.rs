@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::Read;
+extern crate aoc_util;
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -12,21 +11,12 @@ struct Line {
     compare_amount: i32,
 }
 
-
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
-    let lines = contents.lines();
-
     let mut registers: HashMap<String, i32> = HashMap::new();
     let mut max_value = 0;
 
-    for line in lines {
-        let res = parse_line(line);
+    for line in aoc_util::iterate_input_lines(8) {
+        let res = parse_line(&line);
         if !registers.contains_key(&res.register) {
             registers.insert(res.register.clone(), 0);
         }

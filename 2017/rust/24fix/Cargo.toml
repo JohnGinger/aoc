@@ -1,8 +1,10 @@
 [package]
-name = "day_13"
+name = "day_24"
 version = "0.1.0"
 authors = ["John ginger"]
 
+[dependencies]
+failure = "0.1.1"
+
 [dependencies.aoc_util]
 path = "../aoc_util"
-[dependencies]

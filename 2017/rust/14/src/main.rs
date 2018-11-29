@@ -1,5 +1,3 @@
-use std::fs::File;
-use std::io::Read;
 use std::collections::HashMap;
 
 mod knot_hash;
@@ -11,11 +9,7 @@ struct Point {
 }
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
+    let contents = aoc_util::get_input(14);
 
     let mut found = 0;
     let mut points = HashMap::new();
@@ -29,15 +23,13 @@ fn main() {
             row.split("")
                 .filter(|s| !s.is_empty())
                 .map(|x| x.trim())
-                .map(|x| {
-                    format!(
-                        "{:04b}",
-                        match i32::from_str_radix(x, 16) {
-                            Ok(x) => x,
-                            Err(e) => panic!("{} could not be parsed ({:?})", x, e),
-                        }
-                    )
-                })
+                .map(|x| format!(
+                    "{:04b}",
+                    match i32::from_str_radix(x, 16) {
+                        Ok(x) => x,
+                        Err(e) => panic!("{} could not be parsed ({:?})", x, e),
+                    }
+                ))
                 .collect::<String>()
         );
 
@@ -51,7 +43,6 @@ fn main() {
 
                 let point_left = ref_to_value(points.get(&Point { x: x - 1, y }));
                 let point_above = ref_to_value(points.get(&Point { x: x, y: y - 1 }));
-
 
                 match (point_left, point_above) {
                     (Some(left), None) => points.insert(point, left),
@@ -78,7 +69,6 @@ fn main() {
     println!("Part 1 is {}", found);
     println!("Part 2 is {}", region_id - joined);
 }
-
 
 fn ref_to_value(option: Option<&usize>) -> Option<usize> {
     match option {

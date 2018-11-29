@@ -1,15 +1,8 @@
-use std::fs::File;
-use std::io::Read;
-use std::collections::HashMap;
+extern crate aoc_util;
 
 fn main() {
-    let file_name = "../input.txt";
-    let mut file = File::open(file_name).expect("Unable to open input file!");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Cannot convert file contents to string!");
-
-    let chars = contents.split("").collect::<Vec<&str>>();
+    let input = aoc_util::get_input(9);
+    let chars = input.split("").collect::<Vec<&str>>();
 
     let mut stack = Vec::new();
     let mut in_garbage = false;
@@ -19,7 +12,7 @@ fn main() {
 
     for c in chars {
         if in_garbage {
-            if (ignore_next) {
+            if ignore_next {
                 ignore_next = false;
                 continue;
             } else if c == "!" {
@@ -40,7 +33,6 @@ fn main() {
             }
         }
     }
-
 
     println!("Part 1 is {}", score1);
     println!("Part 2 is {}", score2);

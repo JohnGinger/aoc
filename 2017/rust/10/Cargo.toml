@@ -3,5 +3,7 @@ name = "day_10"
 version = "0.1.0"
 authors = ["John ginger"]
 
+[dependencies.aoc_util]
+path = "../aoc_util"
 [dependencies]
 ascii = "0.8.6"

@@ -1,6 +1,9 @@
 [package]
-name = "day_18"
+name = "day_22"
 version = "0.1.0"
 authors = ["John ginger"]
 
 [dependencies]
+
+[dependencies.aoc_util]
+path = "../aoc_util"

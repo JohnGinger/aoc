@@ -5,3 +5,6 @@ authors = ["John ginger"]
 
 [dependencies]
 ascii = "0.8.6"
+
+[dependencies.aoc_util]
+path = "../aoc_util"
