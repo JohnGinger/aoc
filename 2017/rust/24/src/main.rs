@@ -17,10 +17,10 @@ fn main() {
         })
         .collect::<Vec<Part>>();
 
-    println!("Part 1 is {}", get_chain_strongest(Vec::new(), &parts, 0));
+    println!("Part 1 is {}", get_strongest_bridge(Vec::new(), &parts, 0));
     println!(
         "Part 2 is {}",
-        get_chain_longest(Vec::new(), &parts, 0).strength
+        get_longest_bridge(Vec::new(), &parts, 0).strength
     );
 }
 
@@ -30,7 +30,7 @@ struct Part {
     b: usize,
 }
 
-fn get_chain_strongest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize) -> usize {
+fn get_strongest_bridge(bridge: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize) -> usize {
     match remaining_parts
         .into_iter()
         .enumerate()
@@ -38,25 +38,29 @@ fn get_chain_strongest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usiz
             if part.a == tail || part.b == tail {
                 let mut new_remaining_parts = remaining_parts.clone();
                 let part_to_add = new_remaining_parts.remove(index);
-                let mut new_chain = chain.clone();
-                new_chain.push(part_to_add);
+                let mut new_bridge = bridge.clone();
+                new_bridge.push(part_to_add);
                 if part.a == tail {
-                    return get_chain_strongest(new_chain, &new_remaining_parts, part.b);
+                    return get_strongest_bridge(new_bridge, &new_remaining_parts, part.b);
                 } else {
-                    return get_chain_strongest(new_chain, &new_remaining_parts, part.a);
+                    return get_strongest_bridge(new_bridge, &new_remaining_parts, part.a);
                 }
             } else {
-                return BestChain::from_chain(&chain).strength;
+                return BridgeProperties::from_bridge(&bridge).strength;
             }
         })
         .max()
     {
         Some(strength) => strength,
-        None => BestChain::from_chain(&chain).strength,
+        None => BridgeProperties::from_bridge(&bridge).strength,
     }
 }
 
-fn get_chain_longest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize) -> BestChain {
+fn get_longest_bridge(
+    bridge: Vec<Part>,
+    remaining_parts: &Vec<Part>,
+    tail: usize,
+) -> BridgeProperties {
     let candidates = remaining_parts
         .into_iter()
         .enumerate()
@@ -64,20 +68,20 @@ fn get_chain_longest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize)
             if part.a == tail || part.b == tail {
                 let mut new_remaining_parts = remaining_parts.clone();
                 let part_to_add = new_remaining_parts.remove(index);
-                let mut new_chain = chain.clone();
-                new_chain.push(part_to_add);
+                let mut new_bridge = bridge.clone();
+                new_bridge.push(part_to_add);
                 if part.a == tail {
-                    return get_chain_longest(new_chain, &new_remaining_parts, part.b);
+                    return get_longest_bridge(new_bridge, &new_remaining_parts, part.b);
                 } else {
-                    return get_chain_longest(new_chain, &new_remaining_parts, part.a);
+                    return get_longest_bridge(new_bridge, &new_remaining_parts, part.a);
                 }
             } else {
-                return BestChain::from_chain(&chain);
+                return BridgeProperties::from_bridge(&bridge);
             }
         })
-        .collect::<Vec<BestChain>>();
+        .collect::<Vec<BridgeProperties>>();
 
-    let mut best = BestChain::from_chain(&chain);
+    let mut best = BridgeProperties::from_bridge(&bridge);
     for candidate in candidates {
         if candidate.length > best.length {
             best = candidate
@@ -88,16 +92,16 @@ fn get_chain_longest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize)
     return best;
 }
 
-struct BestChain {
+struct BridgeProperties {
     length: usize,
     strength: usize,
 }
 
-impl BestChain {
-    fn from_chain(chain: &Vec<Part>) -> BestChain {
-        return BestChain {
-            length: chain.len(),
-            strength: chain.into_iter().map(|part| part.a + part.b).sum(),
+impl BridgeProperties {
+    fn from_bridge(bridge: &Vec<Part>) -> BridgeProperties {
+        return BridgeProperties {
+            length: bridge.len(),
+            strength: bridge.into_iter().map(|part| part.a + part.b).sum(),
         };
     }
 }
