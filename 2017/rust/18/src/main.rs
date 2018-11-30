@@ -1,75 +1,12 @@
 extern crate aoc_util;
+use aoc_util::get_register_value;
+use aoc_util::get_value;
+use aoc_util::Command;
+use aoc_util::InstructionLine;
 use std::collections::HashMap;
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::thread;
 use std::time::Duration;
-
-#[derive(Debug, Clone)]
-enum Command {
-    Snd,
-    Set,
-    Add,
-    Mul,
-    Mod,
-    Rcv,
-    Jgz,
-}
-
-#[derive(Debug, Clone)]
-struct InstructionLine {
-    command: Command,
-    register: char,
-    value: (Option<i64>, char),
-}
-
-fn get_instruction(instruction: &str) -> Command {
-    match instruction {
-        "snd" => Command::Snd,
-        "set" => Command::Set,
-        "add" => Command::Add,
-        "mul" => Command::Mul,
-        "mod" => Command::Mod,
-        "rcv" => Command::Rcv,
-        "jgz" => Command::Jgz,
-        _ => panic!("Strange instruction"),
-    }
-}
-
-impl InstructionLine {
-    fn new(line: String) -> InstructionLine {
-        let parts = line
-            .split(" ")
-            .filter(|x| !x.is_empty())
-            .collect::<Vec<&str>>();
-        let register = parts[1].chars().next().unwrap();
-        let mut value = (None, ' ');
-        if parts.len() == 3 {
-            value = match parts[2].parse::<i64>() {
-                Ok(val) => (Some(val), parts[2].chars().next().unwrap()),
-                Err(_) => (None, parts[2].chars().next().unwrap()),
-            }
-        }
-        InstructionLine {
-            command: get_instruction(parts[0]),
-            register: register,
-            value: value,
-        }
-    }
-}
-
-fn get_register_value(registers: &HashMap<char, i64>, register: char) -> i64 {
-    match register.to_digit(10) {
-        Some(num) => num as i64,
-        None => *registers.get(&register).unwrap_or(&0),
-    }
-}
-
-fn get_value(registers: &HashMap<char, i64>, value: (Option<i64>, char)) -> i64 {
-    match value {
-        (Some(num), _) => num,
-        (None, register) => *registers.get(&register).unwrap_or(&0),
-    }
-}
 
 fn part1(instructions: &Vec<InstructionLine>) {
     let mut registers: HashMap<char, i64> = HashMap::new();
