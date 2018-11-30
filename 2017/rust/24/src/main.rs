@@ -31,10 +31,7 @@ struct Part {
 }
 
 fn get_chain_strongest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize) -> usize {
-    if remaining_parts.len() == 0 {
-        return BestChain::from_chain(&chain).strength;
-    }
-    remaining_parts
+    match remaining_parts
         .into_iter()
         .enumerate()
         .map(|(index, part)| {
@@ -53,13 +50,13 @@ fn get_chain_strongest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usiz
             }
         })
         .max()
-        .expect("Remaining parts should have a length")
+    {
+        Some(strength) => strength,
+        None => BestChain::from_chain(&chain).strength,
+    }
 }
 
 fn get_chain_longest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize) -> BestChain {
-    if remaining_parts.len() == 0 {
-        return BestChain::from_chain(&chain);
-    }
     let candidates = remaining_parts
         .into_iter()
         .enumerate()
@@ -80,10 +77,7 @@ fn get_chain_longest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize)
         })
         .collect::<Vec<BestChain>>();
 
-    let mut best = BestChain {
-        length: 0,
-        strength: 0,
-    };
+    let mut best = BestChain::from_chain(&chain);
     for candidate in candidates {
         if candidate.length > best.length {
             best = candidate
