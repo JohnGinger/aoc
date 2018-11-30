@@ -4,7 +4,6 @@ use std::sync::mpsc::{channel, Receiver, Sender};
 use std::thread;
 use std::time::Duration;
 
-// mod part2;
 #[derive(Debug, Clone)]
 enum Instructions {
     Snd,
