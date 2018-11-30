@@ -30,7 +30,7 @@ fn main() {
                 }
                 None
             }
-            ref unknown_command => panic!("Unknown instruction - {:?}", unknown_command),
+            _ => panic!("Unknown instruction - {:?}", instruction.command),
         };
         position += 1;
     }

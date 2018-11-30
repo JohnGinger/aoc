@@ -38,6 +38,7 @@ fn part1(instructions: &Vec<InstructionLine>) {
                 }
                 None
             }
+            _ => panic!("Unknown instruction - {:?}", instruction.command),
         };
         position += 1;
     }
@@ -98,6 +99,7 @@ impl DuetPlayingProgram {
                     }
                     None
                 }
+                _ => panic!("Unknown instruction - {:?}", instruction.command),
             };
             self.position += 1;
         }
