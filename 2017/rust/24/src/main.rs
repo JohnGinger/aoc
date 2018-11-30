@@ -32,10 +32,9 @@ struct Part {
 
 fn get_chain_strongest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize) -> usize {
     if remaining_parts.len() == 0 {
-        return chain.clone().into_iter().map(|part| part.a + part.b).sum();
+        return BestChain::from_chain(&chain).strength;
     }
     remaining_parts
-        .clone()
         .into_iter()
         .enumerate()
         .map(|(index, part)| {
@@ -50,7 +49,7 @@ fn get_chain_strongest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usiz
                     return get_chain_strongest(new_chain, &new_remaining_parts, part.a);
                 }
             } else {
-                return chain.clone().into_iter().map(|part| part.a + part.b).sum();
+                return BestChain::from_chain(&chain).strength;
             }
         })
         .max()
@@ -62,7 +61,6 @@ fn get_chain_longest(chain: Vec<Part>, remaining_parts: &Vec<Part>, tail: usize)
         return BestChain::from_chain(&chain);
     }
     let candidates = remaining_parts
-        .clone()
         .into_iter()
         .enumerate()
         .map(|(index, part)| {
