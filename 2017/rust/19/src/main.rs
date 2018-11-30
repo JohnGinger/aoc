@@ -2,13 +2,6 @@ extern crate aoc_util;
 use std::collections::HashMap;
 
 #[derive(PartialEq)]
-enum Direction {
-    Vertical,
-    Horizontal,
-    Both,
-}
-
-#[derive(PartialEq)]
 enum Going {
     Up,
     Down,
@@ -22,18 +15,22 @@ struct Position {
     y: isize,
 }
 
-struct Point {
-    direction: Direction,
-    letter: Option<char>,
+impl Position {
+    fn new(x: usize, y: usize) -> Position {
+        Position {
+            x: x as isize,
+            y: y as isize,
+        }
+    }
 }
 
 fn main() {
-    let contents = aoc_util::get_input(19);
+    let contents = aoc_util::get_input_lines(19);
 
     let points = parse_input(contents);
     let mut position = Position { x: 0, y: 0 };
-    for (position_to_check, point) in &points {
-        if position_to_check.y == 0 && point.direction == Direction::Vertical {
+    for (position_to_check, _) in &points {
+        if position_to_check.y == 0 {
             position = Position {
                 x: position_to_check.x,
                 y: position_to_check.y,
@@ -49,7 +46,7 @@ fn main() {
         steps += 1;
         match points.get(&position) {
             Some(point) => {
-                match point.letter {
+                match point {
                     Some(letter) => visited.push(letter),
                     None => (), // Nothing here
                 }
@@ -61,30 +58,34 @@ fn main() {
             x: position.x - 1,
             y: position.y,
         };
+        let has_left = points.contains_key(&left);
 
         let right = Position {
             x: position.x + 1,
             y: position.y,
         };
+        let has_right = points.contains_key(&right);
 
         let up = Position {
             x: position.x,
             y: position.y - 1,
         };
+        let has_up = points.contains_key(&up);
 
         let down = Position {
             x: position.x,
             y: position.y + 1,
         };
+        let has_down = points.contains_key(&down);
 
         match going {
             Going::Up => {
-                if points.contains_key(&up) {
+                if has_up {
                     position = up
-                } else if points.contains_key(&left) {
+                } else if has_left {
                     going = Going::Left;
                     position = left
-                } else if points.contains_key(&right) {
+                } else if has_right {
                     going = Going::Right;
                     position = right
                 } else {
@@ -92,12 +93,12 @@ fn main() {
                 }
             }
             Going::Down => {
-                if points.contains_key(&down) {
+                if has_down {
                     position = down
-                } else if points.contains_key(&left) {
+                } else if has_left {
                     going = Going::Left;
                     position = left
-                } else if points.contains_key(&right) {
+                } else if has_right {
                     going = Going::Right;
                     position = right
                 } else {
@@ -105,12 +106,12 @@ fn main() {
                 }
             }
             Going::Left => {
-                if points.contains_key(&left) {
+                if has_left {
                     position = left
-                } else if points.contains_key(&up) {
+                } else if has_up {
                     going = Going::Up;
                     position = up
-                } else if points.contains_key(&down) {
+                } else if has_down {
                     going = Going::Down;
                     position = down
                 } else {
@@ -118,12 +119,12 @@ fn main() {
                 }
             }
             Going::Right => {
-                if points.contains_key(&right) {
+                if has_right {
                     position = right
-                } else if points.contains_key(&up) {
+                } else if has_up {
                     going = Going::Up;
                     position = up
-                } else if points.contains_key(&down) {
+                } else if has_down {
                     going = Going::Down;
                     position = down
                 } else {
@@ -136,59 +137,16 @@ fn main() {
     println!("Part 2 is {}", steps)
 }
 
-fn parse_input(input: String) -> HashMap<Position, Point> {
+fn parse_input(lines: Vec<String>) -> HashMap<Position, Option<char>> {
     let mut points = HashMap::new();
-    let mut y = 0;
-    for line in input.lines() {
-        let mut x = 0;
-        for point in line.chars() {
-            let position = Position { x, y };
+    for (y, line) in lines.into_iter().enumerate() {
+        for (x, point) in line.chars().enumerate() {
             match point {
-                '|' => {
-                    points.insert(
-                        position,
-                        Point {
-                            direction: Direction::Vertical,
-                            letter: None,
-                        },
-                    );
-                    ()
-                }
-                '-' => {
-                    points.insert(
-                        position,
-                        Point {
-                            direction: Direction::Horizontal,
-                            letter: None,
-                        },
-                    );
-                    ()
-                }
-                '+' => {
-                    points.insert(
-                        position,
-                        Point {
-                            direction: Direction::Both,
-                            letter: None,
-                        },
-                    );
-                    ()
-                }
-                ' ' => (), // Do nothing,
-                letter => {
-                    points.insert(
-                        position,
-                        Point {
-                            direction: Direction::Both,
-                            letter: Some(letter),
-                        },
-                    );
-                    ()
-                }
-            }
-            x += 1;
+                '|' | '-' | '+' => points.insert(Position::new(x, y), None),
+                ' ' => None, // Do nothing,
+                letter => points.insert(Position::new(x, y), Some(letter)),
+            };
         }
-        y += 1;
     }
     points
 }
