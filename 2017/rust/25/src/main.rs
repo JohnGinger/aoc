@@ -1,11 +1,7 @@
 extern crate aoc_util;
 use std::collections::HashMap;
-#[macro_use]
-extern crate nom;
-use nom::anychar;
-use nom::digit;
-use nom::is_alphabetic;
-use nom::types::CompleteStr;
+extern crate regex;
+use regex::Regex;
 
 #[derive(Debug)]
 struct State {
@@ -14,154 +10,74 @@ struct State {
     next_state: char,
 }
 
-struct MetaState {
-    state: State,
-    current_value: bool,
-}
-
 #[derive(PartialEq, Eq, Hash, Debug)]
 struct StateKey {
     state_id: char,
     current_value: bool,
 }
 
-use nom::{alpha, alphanumeric, space, IResult};
-
-named!(
-    name_parser<&str>,
-    do_parse!(tag!("hello ") >> name: map_res!(alphanumeric, std::str::from_utf8) >> (name))
-);
-
-named!(pub num(&str) -> i64, do_parse!(
-	s: recognize!(
-		pair!(
-			opt!(tag_s!("-")),
-			call!(digit)
-		)
-	) >> (s.parse().unwrap())
-));
-
-named!(pub direction(&str) -> isize, do_parse!(
-	s: alt!(
-        tag_s!("left") => { |_| -1 } |
-        tag_s!("right") => { |_| 1 }
-    ) >> (s)
-));
-
-named!(pub as_bool(&str) -> bool, do_parse!(
-	s: alt!(
-        tag_s!("0") => { |_| false } |
-        tag_s!("1") => { |_| true }
-    ) >> (s)
-));
-
-named!(state_block(&str) -> (bool, State), ws!(do_parse!(
-	tag_s!("If the current value is ")
-    >> current_value: terminated!(as_bool, tag_s!(":"))
-    >> tag_s!("- Write the value ")
-    >> new_value: terminated!(as_bool, tag_s!("."))
-    >> tag_s!("- Move one slot to the ")
-    >> cursor: terminated!(direction, tag_s!("."))
-    >> tag_s!("- Continue with state")
-    >> next_state: terminated!(anychar, tag_s!("."))
-    >> (current_value,
-        State {
-            value: new_value,
-            cursor: cursor,
-            next_state: next_state
-        })          
-)));
-
-named!(state_block2(&str) -> State, ws!(do_parse!(
-    tag_s!("- Write the value ")
-    >> new_value: terminated!(as_bool, tag_s!("."))
-    >> tag_s!("- Move one slot to the ")
-    >> cursor: terminated!(direction, tag_s!("."))
-    >> tag_s!("- Continue with state")
-    >> next_state: terminated!(anychar, tag_s!("."))
-    >> (State {
-            value: new_value,
-            cursor: cursor,
-            next_state: next_state
-        })         
-)));
-
-fn parse(lines: String) -> (char, usize, HashMap<StateKey, State>) {
-    let (states, (start_state, steps, s2)) = ws!(
-        lines.as_str(),
-        do_parse!(
-            tag_s!("Begin in state")
-                >> start: terminated!(anychar, tag_s!("."))
-                >> tag_s!("Perform a diagnostic checksum after")
-                >> steps: terminated!(num, tag_s!("steps."))
-                >> states:
-                many0!(ws!(do_parse!(
-                    tag_s!("In state")
-                        >> state: terminated!(anychar, tag_s!(":"))
-                        >> transitions:
-                            many1!(ws!(do_parse!(
-                                tag_s!("If the current value is")
-                                    >> current_value: terminated!(as_bool, tag_s!(":"))
-                                    >> tag_s!("- Write the value")
-                                    >> next_value: terminated!(as_bool, tag_s!("."))
-                                    >> tag_s!("- Move one slot to the")
-                                    >> cursor:
-                                        terminated!(
-                                            alt!(
-                                            tag_s!("left") => { |_| -1 } |
-                                            tag_s!("right") => { |_| 1 }
-                                        ),
-                                            tag_s!(".")
-                                        )
-                                    >> tag_s!("- Continue with state")
-                                    >> next_state: terminated!(anychar, tag_s!("."))
-                                    >> (next_state)
-                            )))
-                        >> (state, transitions)
-                )))
-                >> ((start, steps as usize, states))
-        )
-    )
-    .expect("Couldn't parse start and steps");
-/*
-    let state_blocks = states.split("\n\n");
-
-    for state in state_blocks {
-        let res = ws!(
-            state,
-            do_parse!(
-                tag_s!("In state ")
-                    >> start: terminated!(anychar, tag_s!(":"))
-                    >> blah: many1!(state_block)
-                    >> (
-                        start,
-                        blah
-                    )
-            )
-        )
-        .expect("Couldn't parse state");
-        println!(" {:?}", res);
-        println!("")
+fn check(regex: &Regex, line: &str) -> Option<String> {
+    if let Some(cap) = regex.captures(line.trim()) {
+        return Some(cap["result"].to_string());
     }
-*/
+    None
+}
+fn parse(lines: String) -> (char, usize, HashMap<StateKey, State>) {
+    let mut start_state = ' ';
+    let mut steps = 0;
+    let mut states = HashMap::new();
 
+    let starting_state_check = Regex::new(r"^Begin in state (?P<result>[A-Z]).$").unwrap();
+    let steps_check =
+        Regex::new(r"^Perform a diagnostic checksum after (?P<result>[0-9]+) steps.$").unwrap();
+    let new_state_check = Regex::new(r"^In state (?P<result>[A-Z]):$").unwrap();
+    let current_value_check = Regex::new(r"^If the current value is (?P<result>[0-1]):$").unwrap();
+    let write_value_check = Regex::new(r"^- Write the value (?P<result>[0-1]).$").unwrap();
+    let move_value_check =
+        Regex::new(r"^- Move one slot to the (?P<result>(left)|(right)).$").unwrap();
+    let next_state_check = Regex::new(r"^- Continue with state (?P<result>[A-Z]).$").unwrap();
 
-    println!("states {} {} {:?}", start_state, steps, states);
-    /*
-    let mut program_states = HashMap::new();
-    for (state_id, state_info_vec) in states {
-        println!("states {}", state_id);
-        for x in state_info_vec {
+    let mut current_state = 'A';
+    let mut current_value = false;
+    let mut value = false;
+    let mut cursor = 1;
+
+    for line in lines.lines() {
+        if let Some(state) = check(&starting_state_check, line) {
+            start_state = state.chars().next().expect("This should be a char");
+        }
+        if let Some(found_steps) = check(&steps_check, line) {
+            steps = found_steps.parse::<usize>().expect("This should be number");
+        }
+        if let Some(new_state) = check(&new_state_check, line) {
+            current_state = new_state.chars().next().expect("Couldn't read new state");
+        }
+        if let Some(new_current_value) = check(&current_value_check, line) {
+            current_value = new_current_value == "1";
+        }
+        if let Some(new_write_value) = check(&write_value_check, line) {
+            value = new_write_value == "1";
+        }
+        if let Some(new_move_value) = check(&move_value_check, line) {
+            cursor = if new_move_value == "left" { -1 } else { 1 }
+        }
+        if let Some(new_next_state) = check(&next_state_check, line) {
             let key = StateKey {
-                state_id: state_id,
-                current_value: x.current_value,
+                state_id: current_state,
+                current_value: current_value,
             };
-            program_states.insert(key, x.state);
+            let state = State {
+                value: value,
+                cursor: cursor,
+                next_state: new_next_state
+                    .chars()
+                    .next()
+                    .expect("Couldn't read next state"),
+            };
+            states.insert(key, state);
         }
     }
-    */
-
-    (start_state, 0, HashMap::new())
+    (start_state, steps, states)
 }
 
 fn main() {
@@ -170,7 +86,6 @@ fn main() {
     let mut state_id = start_state;
     let mut cursor = 0;
     let mut tape = HashMap::new();
-    println!("{:?}", states);
 
     for _ in 0..steps {
         let current_value = *tape.get(&cursor).unwrap_or(&false);

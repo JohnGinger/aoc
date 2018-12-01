@@ -4,8 +4,7 @@ version = "0.1.0"
 authors = ["John ginger"]
 
 [dependencies]
-nom = "4.1.1"
-num = "*"
+regex = "1"
 
 [dependencies.aoc_util]
 path = "../aoc_util"
