@@ -1,5 +1,6 @@
 extern crate aoc_util;
-use std::collections::HashMap;
+extern crate fnv;
+use fnv::FnvHashMap;
 extern crate regex;
 use regex::Regex;
 
@@ -22,10 +23,10 @@ fn check(regex: &Regex, line: &str) -> Option<String> {
     }
     None
 }
-fn parse(lines: String) -> (char, usize, HashMap<StateKey, State>) {
+fn parse(lines: String) -> (char, usize, FnvHashMap<StateKey, State>) {
     let mut start_state = ' ';
     let mut steps = 0;
-    let mut states = HashMap::new();
+    let mut states = FnvHashMap::default();
 
     let starting_state_check = Regex::new(r"^Begin in state (?P<result>[A-Z]).$").unwrap();
     let steps_check =
@@ -85,7 +86,7 @@ fn main() {
     let (start_state, steps, states) = parse(lines);
     let mut state_id = start_state;
     let mut cursor = 0;
-    let mut tape = HashMap::new();
+    let mut tape = FnvHashMap::default();;
 
     for _ in 0..steps {
         let current_value = *tape.get(&cursor).unwrap_or(&false);
