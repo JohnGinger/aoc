@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "Jenkinsfile_sagacity": "groovy",
+        "iostream": "cpp",
+        "iterator": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "iosfwd": "cpp",
+        "ratio": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "chrono": "cpp"
+    }
+}
