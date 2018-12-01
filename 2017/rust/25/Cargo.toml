@@ -1,0 +1,11 @@
+[package]
+name = "day_25"
+version = "0.1.0"
+authors = ["John ginger"]
+
+[dependencies]
+nom = "4.1.1"
+num = "*"
+
+[dependencies.aoc_util]
+path = "../aoc_util"
