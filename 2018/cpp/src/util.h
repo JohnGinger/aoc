@@ -1,3 +1,6 @@
+#ifndef UTIL
+#define UTIL
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -32,3 +35,4 @@ void time_function(string name, void (*f)())
     const auto duration_ms(chrono::duration_cast<chrono::duration<double, std::milli>>(stop - start).count());
     printf("%s took %6.2lfms\n", name.c_str(), duration_ms);
 }
+#endif

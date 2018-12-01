@@ -2,6 +2,7 @@
 #include <fstream>
 #include <unordered_set>
 #include <vector>
+#include "util.h"
 
 using namespace std;
 
