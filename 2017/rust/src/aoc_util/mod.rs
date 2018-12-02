@@ -14,7 +14,7 @@ pub fn get_input(day: i32) -> String {
 }
 
 pub fn get_input_lines(day: i32) -> Vec<String> {
-    let file_name = format!("../../data/{}.txt", day);
+    let file_name = format!("../data/{}.txt", day);
     let file = File::open(file_name).expect("Unable to open input file!");
 
     BufReader::new(file).lines().map(|l| l.unwrap()).collect()
@@ -44,7 +44,7 @@ impl Iterator for PuzzleLines {
 }
 
 pub fn iterate_input_lines(day: i32) -> PuzzleLines {
-    let file_name = format!("../../data/{}.txt", day);
+    let file_name = format!("../data/{}.txt", day);
     PuzzleLines::new(file_name)
 }
 
