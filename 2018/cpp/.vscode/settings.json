@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "Jenkinsfile_sagacity": "groovy",
+        "map": "cpp",
+        "__config": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "iosfwd": "cpp",
+        "chrono": "cpp",
+        "initializer_list": "cpp"
+    }
+}

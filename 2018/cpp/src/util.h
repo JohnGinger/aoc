@@ -28,12 +28,12 @@ vector<string> get_input_as_vec(string day)
     return lines;
 }
 
-void time_function(string name, function<void()> func)
+void time_function(function<void()> func)
 {
     const auto start(chrono::high_resolution_clock::now());
     func();
     const auto stop(chrono::high_resolution_clock::now());
     const auto duration_ms(chrono::duration_cast<chrono::duration<double, std::milli>>(stop - start).count());
-    printf("%s took %6.2lfms\n", name.c_str(), duration_ms);
+    printf("Took %6.2lfms", duration_ms);
 }
 #endif
