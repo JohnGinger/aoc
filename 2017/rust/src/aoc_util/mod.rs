@@ -4,7 +4,7 @@ pub mod knot_hash;
 pub mod vm;
 
 pub fn get_input(day: i32) -> String {
-    let file_name = format!("../../data/{}.txt", day);
+    let file_name = format!("../data/{}.txt", day);
     let mut file = File::open(file_name).expect("Unable to open input file!");
     let mut contents = String::new();
     file.read_to_string(&mut contents)
