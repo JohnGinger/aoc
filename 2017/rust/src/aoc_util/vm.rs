@@ -36,8 +36,8 @@ impl InstructionLine {
         }
         InstructionLine {
             command: get_instruction(parts[0]),
-            register: register,
-            value: value,
+            register,
+            value,
         }
     }
 }

@@ -65,7 +65,7 @@ fn parse(lines: &str) -> (char, usize, FnvHashMap<StateKey, State>) {
         if let Some(new_next_state) = check(&next_state_check, line) {
             let key = StateKey {
                 state_id: current_state,
-                current_value: current_value,
+                current_value,
             };
             let state = State {
                 value,
@@ -91,8 +91,8 @@ pub fn run() {
     for _ in 0..steps {
         let current_value = *tape.get(&cursor).unwrap_or(&false);
         let key = StateKey {
-            current_value: current_value,
-            state_id: state_id,
+            current_value,
+            state_id,
         };
         let state_object = states.get(&key);
         match state_object {
