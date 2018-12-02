@@ -9,8 +9,7 @@ pub fn run() {
         .collect::<Vec<&str>>();
     let mut positions = "abcdefghijklmnop".chars().collect();
     let mut i = 0;
-    let mut dance_cycle = 0;
-    debug!("Dance cycle is {}", dance_cycle);
+    let mut dance_cycle;
     loop {
         i += 1;
         dance(&mut positions, &instructions);
