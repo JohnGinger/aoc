@@ -21,7 +21,7 @@ void run()
     // vector<string> lines = {"#1 @ 1,3: 4x4",
     //                         "#2 @ 3,1: 4x4",
     //                         "#3 @ 5,5: 2x2"};
-    auto fabric = unordered_map<string, vector<int>>();
+    auto fabric = unordered_map<int, int>();
     auto overlapping = unordered_set<int>();
     auto claims = unordered_set<int>();
 
@@ -43,20 +43,23 @@ void run()
         {
             for (auto j = numbers[2]; j < (numbers[2] + numbers[4]); j++)
             {
-                auto key = to_string(i) + "-" + to_string(j);
+                auto key = i * 10000 + j;
                 auto existing = fabric[key];
-                if (existing.size() == 1)
+                if (existing == 0)
+                {
+                    fabric[key] = -numbers[0];
+                }
+                else if (existing < 0)
                 {
                     overlapping_count += 1;
-                    overlapping.insert(existing[0]);
+                    overlapping.insert(-fabric[key]);
                     overlapping.insert(numbers[0]);
+                    fabric[key] = 1;
                 }
-                else if (existing.size() > 1)
+                else
                 {
                     overlapping.insert(numbers[0]);
                 }
-                existing.push_back(numbers[0]);
-                fabric[key] = existing;
             }
         }
     }
@@ -69,5 +72,4 @@ void run()
         }
     }
 }
-
 } // namespace day3
