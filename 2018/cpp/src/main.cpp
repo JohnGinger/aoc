@@ -3,10 +3,11 @@
 #include "1.cpp"
 #include "2.cpp"
 #include "3.cpp"
+#include "4.cpp"
 
 int main()
 {
-    vector<function<void()>> days = {day1::run, day2::run, day3::run};
+    vector<function<void()>> days = {day1::run, day2::run, day3::run, day4::run};
     auto developing = true;
     if (developing)
     {
