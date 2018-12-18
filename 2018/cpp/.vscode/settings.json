@@ -20,6 +20,8 @@
         "stdexcept": "cpp",
         "type_traits": "cpp",
         "typeinfo": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "numeric": "cpp",
+        "string": "cpp"
     }
 }
