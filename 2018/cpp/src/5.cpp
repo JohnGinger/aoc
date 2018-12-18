@@ -75,7 +75,6 @@ void run()
     auto min_length = word.size();
     for (auto letter : letters_alphabet)
     {
-
         auto new_word = replace_letter(letter, react_first);
         auto length_word = react(new_word).size();
         if (length_word < min_length)
