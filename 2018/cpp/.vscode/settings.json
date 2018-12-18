@@ -22,6 +22,7 @@
         "typeinfo": "cpp",
         "algorithm": "cpp",
         "numeric": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "list": "cpp"
     }
 }

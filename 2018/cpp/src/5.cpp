@@ -25,7 +25,7 @@ std::string join(const std::vector<char> &lst, const std::string &delim)
     return ret;
 }
 
-int react(string word)
+vector<char> react(string word)
 {
     vector<char> letters(word.begin(), word.end());
     auto i = 0;
@@ -49,10 +49,10 @@ int react(string word)
             i += 1;
         }
     }
-    return letters.size();
+    return letters;
 }
 
-string replace_letter(char letter, string word)
+string replace_letter(char letter, vector<char> word)
 {
     string output_word;
     for (auto l : word)
@@ -68,16 +68,16 @@ string replace_letter(char letter, string word)
 void run()
 {
     auto word = get_input_as_vec("5")[0];
-
-    std::cout << "Part 1 is " << react(word) << endl;
+    auto react_first = react(word);
+    std::cout << "Part 1 is " << react_first.size() << endl;
 
     string letters_alphabet = "qwertyuiopasdfghjklzxcvbnm";
     auto min_length = word.size();
     for (auto letter : letters_alphabet)
     {
 
-        auto new_word = replace_letter(letter, word);
-        auto length_word = react(new_word);
+        auto new_word = replace_letter(letter, react_first);
+        auto length_word = react(new_word).size();
         if (length_word < min_length)
         {
             min_length = length_word;
