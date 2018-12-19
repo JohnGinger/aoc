@@ -100,7 +100,8 @@ void run()
                 if (start)
                 {
                     smatch guard_id_match;
-                    regex_search(matches[7].str(), guard_id_match, number_regex);
+                    auto match_string = matches[7].str();
+                    regex_search(match_string, guard_id_match, number_regex);
                     guard_id = stoi(guard_id_match[1]);
                 }
                 auto new_guard = Guard{time, wake, sleep, start, guard_id};
@@ -112,7 +113,7 @@ void run()
             std::cout << "Match not found\n";
         }
     }
-    
+
     sort(guards.begin(), guards.end(), compareByTime);
     auto minutes_asleep = map<int, int>();
     auto common_asleep = map<int, map<int, int>>();

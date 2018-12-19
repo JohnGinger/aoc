@@ -23,6 +23,8 @@
         "algorithm": "cpp",
         "numeric": "cpp",
         "string": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     }
 }
