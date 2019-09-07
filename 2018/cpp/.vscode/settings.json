@@ -25,6 +25,11 @@
         "string": "cpp",
         "list": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "set": "cpp",
+        "__tree": "cpp",
+        "__split_buffer": "cpp",
+        "deque": "cpp",
+        "__node_handle": "cpp"
     }
 }

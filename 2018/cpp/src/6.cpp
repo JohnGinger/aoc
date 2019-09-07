@@ -12,7 +12,7 @@ using namespace std;
 
 namespace day6
 {
-bool DISPLAY = true;
+bool DISPLAY = false;
 struct Point
 {
     int id;
